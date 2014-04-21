@@ -1,0 +1,5 @@
+(define (lo)
+  (generate-proper-tail-calls #f)
+  (load ".gambc/load.scm"))
+
+(lo)
