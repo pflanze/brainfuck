@@ -89,3 +89,6 @@
   (c/load "lib/cj-io-util")
   (i/load "lib/cj-path"))
 
+(c/load "lib/enum")
+(c/load "lib/easy")
+
