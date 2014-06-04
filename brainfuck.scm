@@ -103,13 +103,15 @@
 		 ((c p*) p)
 		 (mcase c
 			(symbol?
-			 (xcase (source-code c)
-				((>) (inc! dp))
-				((<) (dec! dp))
-				((+) (INC! (vector-ref d dp)))
-				((-) (DEC! (vector-ref d dp)))
-				((|.|) (print (integer->char (vector-ref d dp))))
-				((|,|) (SET! (vector-ref d dp) (read-char))))
+			 (case (source-code c)
+			   ((>) (inc! dp))
+			   ((<) (dec! dp))
+			   ((+) (INC! (vector-ref d dp)))
+			   ((-) (DEC! (vector-ref d dp)))
+			   ((|.|) (print (integer->char (vector-ref d dp))))
+			   ((|,|) (SET! (vector-ref d dp) (read-char)))
+			   (else
+			    (source-error c "unknown op")))
 			 (lp p*))
 			(pair?
 			 ;; subprogram
