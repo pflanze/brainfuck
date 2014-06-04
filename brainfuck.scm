@@ -81,9 +81,13 @@
        > > + |.|
        > + +  |.|)))
 
-(def (evalbf p len)
-     (def d (make-vector len))
-     (def dp 0) ;; data pointer
+
+(def (evalbf p len-or-vec #!optional (dp 0))
+     ;; dp: data pointer
+     ;; d: data
+     (def d (if (vector? len-or-vec)
+		len-or-vec
+		(make-vector len-or-vec)))
 
      (let interp
 	 ((beginof-p p)
@@ -104,10 +108,10 @@
 		 (mcase c
 			(symbol?
 			 (case (source-code c)
-			   ((>) (inc! dp))
-			   ((<) (dec! dp))
-			   ((+) (INC! (vector-ref d dp)))
-			   ((-) (DEC! (vector-ref d dp)))
+			   ((> R) (inc! dp))
+			   ((< L) (dec! dp))
+			   ((+ r) (INC! (vector-ref d dp)))
+			   ((- r*) (DEC! (vector-ref d dp)))
 			   ((|.|) (print (integer->char (vector-ref d dp))))
 			   ((|,|) (SET! (vector-ref d dp) (read-char)))
 			   (else
@@ -142,4 +146,28 @@
  > (values->vector (with-output-to-string* (& (evalbf e2 8))))
  #(#(0 0 72 100 87 33 10 0)
     "Hello World!\n"))
+
+
+;; https://en.wikipedia.org/wiki/P%E2%80%B2%E2%80%B2
+
+(def p1
+     (quote-source
+      (R (R) L (r* (L (L))
+		   r* L)
+	 R r)))
+
+(def p1*
+     (quote-source
+      (> (>) < (- (< (<))
+		  - <)
+	 > +)))
+
+(TEST
+ > (evalbf p1 '#(0 0 0 0 4 0 0 0) 4)
+ #(0 0 0 0 3 0 0 0)
+ > (evalbf p1* '#(0 0 0 0 100 0 0 0) 4)
+ #(0 0 0 0 99 0 0 0)
+ > (evalbf p1 '#(0 0 1000 0) 2)
+ #(0 0 999 0)
+ )
 
