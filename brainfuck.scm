@@ -139,7 +139,7 @@
  #(0 0 0 0)
  > (evalbf e1 8)
  #(0 0 72 104 88 32 8 0)
- ;; > (evalbf e2 8)
- ;; Hello World!
- ;; #(0 0 72 100 87 33 10 0)
- )
+ > (values->vector (with-output-to-string* (& (evalbf e2 8))))
+ #(#(0 0 72 100 87 33 10 0)
+    "Hello World!\n"))
+
