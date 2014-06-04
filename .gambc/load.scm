@@ -92,3 +92,4 @@
 (c/load "lib/enum")
 (c/load "lib/easy")
 
+(i/load "brainfuck")
