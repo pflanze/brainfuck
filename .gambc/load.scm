@@ -87,9 +87,11 @@
 
   (c/load "lib/u8-parse")
   (c/load "lib/cj-io-util")
+  (c/load "lib/string-util-3")
   (i/load "lib/cj-path"))
 
 (c/load "lib/enum")
 (c/load "lib/easy")
+(c/load "lib/cj-setf")
 
 (i/load "brainfuck")

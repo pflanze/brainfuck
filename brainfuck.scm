@@ -1,54 +1,7 @@
-;; XX move to lib
-(defmacro (dec! v)
-  (assert* symbol? v
-	   (lambda (v)
-	     `(set! ,v (dec ,v)))))
-
-;; setf incf decf library.
-;; XX move to lib?
-(compile-time
- (def (substitute-ref-to sym* op!)
-      (assert*
-       symbol? sym*
-       (lambda (sym)
-	 (let ((s (symbol.string sym)))
-	   (if (string-ends-with? s "-ref")
-	       (symbol-append (substring s 0 (- (string-length s) 4))
-			      "-"
-			      op!)
-	       (source-error sym* "symbol does not end in |-ref|"))))))
- 
- (def (inc-dec!-expand e op!)
-      (mcase e
-	     (pair?
-	      (let ((a (car (source-code e))))
-		(mcase a
-		       (symbol?
-			`(,(substitute-ref-to (source-code a) op!)
-			  ,@(cdr (source-code e))))))))))
-
-(def (vector-inc! v i)
-     (vector-set! v i
-		  (inc (vector-ref v i))))
-(defmacro (INC! e)
-  (inc-dec!-expand e 'inc!))
-
-(def (vector-dec! v i)
-     (vector-set! v i
-		  (dec (vector-ref v i))))
-(defmacro (DEC! e)
-  (inc-dec!-expand e 'dec!))
-
-(defmacro (SET! e v)
-  (mcase e
-	 (pair?
-	  (let ((a (car (source-code e))))
-	    (mcase a
-		   (symbol?
-		    `(,(substitute-ref-to (source-code a) 'set!)
-		      ,@(cdr (source-code e))
-		      ,v)))))))
-
+(require lib.easy
+	 lib.cj-source
+	 lib.cj-source-quasiquote
+	 lib.cj-setf)
 
 
 ;; https://en.wikipedia.org/wiki/Brainfuck
