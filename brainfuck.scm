@@ -1,7 +1,7 @@
-(require lib.easy
-	 lib.cj-source
-	 lib.cj-source-quasiquote
-	 lib.cj-setf)
+(require easy
+         cj-source
+         cj-source-quasiquote
+         cj-setf)
 
 
 ;; https://en.wikipedia.org/wiki/Brainfuck
